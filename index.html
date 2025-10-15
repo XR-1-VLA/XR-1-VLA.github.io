@@ -1,1 +1,690 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+  <meta charset="utf-8">
+  <meta name="description"
+    content="XR-1: Towards Versatile Vision-Language-Action Models via Learning Unified Vision-Motion Representations">
+  <meta name="keywords" content="Vision-Language-Action Model, Robot Learning, Imitation Learning, Latent Representation, Large-Scale Pretraining">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XR-1: Towards Versatile Vision-Language-Action Models via Learning Unified Vision-Motion Representations</title>
+
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+  <!-- <link href="./static/css/googlecss.css"
+        rel="stylesheet"> -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="./static/js/jquerymin351.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <style>
+    .author-block {
+        display: none;
+    }
+
+    .publication-authors:hover .author-block {
+        display: block;
+    }
+</style>
+
+</head>
+
+<body>
+
+<!--  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://x-humanoid.com">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+      </div>
+
+    </div>
+  </nav> -->
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">XR-1: Towards Versatile Vision-Language-Action Models via Learning Unified Vision-Motion Representations </h1>
+             
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <!-- <video id="teaser" autoplay muted loop playsinline height="100%">
+          <source src="./static/videos/teaser.mp4" type="video/mp4">
+        </video> -->
+        <div class="yush-div-center">
+          <img src="./static/images/abstract_img.png" class="img-responsive">
+        </div>
+
+        <h2 class="subtitle has-text-centered">
+          We introduce <span style="font-weight: bold"> XR-1</span>, a versatile and scalable vision-language-action framework. XR-1 supports robust multi-task learning across diverse robot embodiments and environments
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="single-task-1">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+               Recent progress in large-scale robotic datasets and vision-language models 
+			   (VLMs) has advanced research on vision-language-action (VLA) models. 
+			    However, existing VLA models still face two fundamental challenges: 
+				(i) producing precise low-level actions from high-dimensional observations, 
+				(ii) bridging domain gaps across heterogeneous data sources, including diverse robot embodiments and human demonstrations. Existing methods often encode latent variables
+				from either visual dynamics or robotic actions to guide policy learning, but they
+				fail to fully exploit the complementary multi-modal knowledge present in largescale, heterogeneous datasets. 
+				In this work, we present XR-1, a novel framework for versatile and scalable VLA learning across diverse robots, tasks, and environments. 
+				At its core, XR-1 introduces the <em>Unified Vision-Motion Codes (UVMC)</em>, a discrete latent representation learned via a dual-branch VQ-VAE that jointly encodes visual dynamics and robotic motion. UVMC addresses these challenges
+				by (i) serving as an intermediate representation between the observations and actions, and (ii) aligning multimodal dynamic information from heterogeneous data
+				sources to capture complementary knowledge. To effectively exploit UVMC, we
+				propose a <em>three-stage training paradigm</em>: (i) self-supervised UVMC learning, (ii)
+				UVMC-guided pretraining on large-scale cross-embodiment robotic datasets, and
+				(iii) task-specific post-training. We validate XR-1 through extensive real-world
+				experiments with more than 12,000 rollouts on six different robot embodiments,
+				spanning over 120 diverse manipulation tasks. XR-1 consistently outperforms state-of-the-art baselines such as π0 and GR00T-N1.5 while demonstrating strong
+				generalization to novel objects, background variations, distractors, and illumination changes.
+            </p>
+
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <!--/ Abstract. -->
+
+     <!-- <div class="columns is-centered">
+        <div class="column is-full-width">
+          <video id="teaser" autoplay muted loop playsinline height="100%" controls>
+            <source src="./static/videos/teaser.mp4" type="video/mp4">
+          </video>
+          <br>
+          <br>
+        </div>
+      </div> -->
+
+      <!-- Overview. -->
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Overview</h2>
+          <div class="content has-text-justified">
+            <div class="columns" id="4pic">
+              <div class="column has-text-centered">
+                  <img src="./static/images/xr1_overview.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+              </div>
+          </div>
+
+            <p> Overview of <span style="font-weight: bold"> XR-1</span>. In XR-1, we introduce the <em>Unified Vision-Motion Codes (UVMC)</em>, a discrete latent representation that jointly encodes visual dynamics and robotic motion. XR-1 adopts a three-stage training paradigm to enable precise low-level control across diverse robots and tasks. 
+			</p>
+
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <!-- Overview. -->
+	  
+	  <!-- Hardware Setup. -->
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Experiment Setup</h2>
+          <div class="content has-text-justified">
+            <div class="columns" id="4pic">
+              <div class="column has-text-centered">
+                  <img src="./static/images/xr1_exp_setup.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+              </div>
+          </div>
+
+            <p>Experimental Setup. We evaluate XR-1 across six robot embodiments(Tien Kung 1.0/2.0, Single-/Dual-Arm UR-5e, Dual-Arm Franka, and AgileX Cobot Magic 2.0), covering more than 120 manipulation tasks with over 120k rollouts. 
+			</p>
+
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <!-- / Hardware Setup. -->
+
+		<div class="columns is-centered">
+		  <div class="column is-full-width">
+			<h2 class="title is-3">XR1 Inference Video Samples</h2>
+			  <!-- Dual-Arm UR-5e -->
+			  <h3 class="subtitle is-4 has-text-centered">Dual-Arm UR-5e</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DUR-StackBowls</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DUR-StackBowls.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DUR-SweepTrash</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DUR-SweepTrash.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DUR-FindTapeBasket</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DUR-FindTapeBasket.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>	
+			  <!-- Tien Kung 2.0 -->
+			  <h3 class="subtitle is-4 has-text-centered">Tien Kung 2.0</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK2-CloseDoorKnob</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK2-CloseDoorKnob.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK2-CollectScrews</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK2-CollectScrews.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK2-TakeBasketTea</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK2-TakeBasketTea.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+			  <!-- Tien Kung 1.0 -->
+			  <h3 class="subtitle is-4 has-text-centered">Tien Kung 1.0</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK1-PlaceFlipButton</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK1-PlaceFlipButton.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK1-PickWipeTowel</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK1-PickWipeTowel.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK1-MoveChopstickCup</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK1-MoveChopstickCup.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+			<!-- Dual-Arm Franka -->
+			<h3 class="subtitle is-4 has-text-centered">Dual-Arm Franka</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DFR-StackBowls</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DFR-StackBowls.MP4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DFR-SweepRubbish</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DFR-SweepRubbish.MP4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DFR-TransferCup</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DFR-TransferCup.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+			<!-- AgileX Cobot Magic V2.0 -->
+			<h3 class="subtitle is-4 has-text-centered">AgileX Cobot Magic V2.0</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>AGX-MeshStackCup</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/AGX-MeshStackCup.MP4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>AGX-HangScissors</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/AGX-HangScissors.MP4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>AGX-PlaceScrewdriver</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/AGX-PlaceScrewdriver.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+			<!-- Single-Arm UR-5e -->
+			<h3 class="subtitle is-4 has-text-centered">Single-Arm UR-5e</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>SUR-PackEggBox</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/SUR-PackEggBox.MP4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>SUR-PourTubeBeaker</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/SUR-PourTubeBeaker.MP4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>SUR-StackCubes</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/SUR-StackCubes.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+
+		  </div>
+		</div>
+		<br>
+		<br>
+		
+	  <!-- Generalization Setup -->
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Generalization Setup</h2>
+		<h3 class="subtitle is-5 has-text-centered">DFR-SweepTrash</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Base</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-SweepTrash_Base.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Dustpan</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-SweepTrash_Unseen_Dustpan.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Rub</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-SweepTrash_Unseen_Rubbish.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Rub&Dynamic Interference</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-SweepTrash_Unseen_Rubbish+Dynamic_Object _Interference.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div> 
+
+		  
+		<h3 class="subtitle is-5 has-text-centered">DFR-TransferCup</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Base</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-TransferCup_Base.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Background</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-TransferCup_Unseen_Background.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Cup&Static Interference</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-TransferCup_Unseen_Cup+Static_Object_Interference.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Cup&Background&Light</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-TransferCup_Unseen Cup+Unseen_Background+Unseen_Light.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div> 		  
+		  
+		</div>
+	  </div>
+      <br>
+      <br>	
+		
+		
+		
+		
+		
+		
+	  <!-- Comparison with Baselines -->
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Comparison with Baselines</h2>
+		  <h3 class="subtitle is-4"><span style="font-weight: bold">Representative Tasks Comparison</span></h3>
+          <div class="content has-text-justified">		
+            <p>We conducted evaluations on bimanual collaboration, dexterous manipulation, fluid/deformable object handling, contact-rich interactions, and dynamic environments. Our XR1 model was compared against baseline methods including RDT, π0, GR00T-N1.5, and UniVLA. We selected <span style="font-weight: bold">the best baseline (π0)</span> for comparative demonstration videos. Demonstration videos are shown below:
+			</p>
+          </div>
+		  
+		  
+		<!-- Bimanual Collaboration -->
+		<h3 class="subtitle is-5 has-text-centered">Bimanual Collaboration: DUR-TransCupHolder</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/pi0_fail_Bimanual_Collaboration.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			 
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/xr1_suc_Bimanual_Collaboration.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+
+		<!-- Dexterous Manipulation -->
+		<h3 class="subtitle is-5 has-text-centered">Dexterous Manipulation: DUR-CloseDoorKnob</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/pi0_fail_Dexterous_Manipulation.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			 
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/xr1_suc_Dexterous_Manipulation.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>   
+		<!-- Fluid Object Handling -->
+		<h3 class="subtitle is-5 has-text-centered">Fluid Object Handling: SUR-PourTubeBeaker</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/pi0_fail_Fluid_Object_Handling.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			 
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/xr1_suc_Fluid_Object_Handling.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+		<!-- Deformable Object Handling -->
+		<h3 class="subtitle is-5 has-text-centered">Deformable Object Handling: DFR-HangTowelRack</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/pi0_fail_Deformable_Object_Handling.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			 
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/xr1_suc_Deformable_Object_Handling.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+		<!-- Contact-Rich Interactions -->
+		<h3 class="subtitle is-5 has-text-centered">Contact-Rich Interactions: DFR-SweepRubbish</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/pi0_fail_Contact-Rich_Interactions.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			 
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/xr1_suc_Contact-Rich_Interactions.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+		<!-- Dynamic Environments -->
+		<h3 class="subtitle is-5 has-text-centered">Dynamic Environments: DUR-TransButtons</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/pi0_fail_Dynamic_Environments.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			 
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/xr1_suc_Dynamic_Environments.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  		  
+		  
+        </div>
+      </div>
+	  <h3 class="subtitle is-4"><span style="font-weight: bold">Few-shot Comparison</span></h3>
+	  <div class="content has-text-justified">		
+		<p>We conducted few-shot learning experiments on the Dual-ArmUR-5e and Tien Kung 1.0 robotic systems, performing comparative analysis against single-task baseline methods including ACT and DP. The experimental results and comparative evaluation are presented as follows:
+		</p>
+		<h3 class="subtitle is-5 has-text-centered">TK2-PlaceCircuit</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>ACT</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/ACT_fail_few_shot_TK2-PlaceCircuit.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>DP</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/DP_fail_few_shot_TK2-PlaceCircuit.MP4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			 
+			  <p style="font-size: 125%">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/comparsion/xr1_suc_few_shot_TK2-PlaceCircuit.MP4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+	  </div>
+      <br>
+      <br>
+
+
+
+
+
+
+
+
+	  
+	<!-- Experiment Result -->
+	<div class="columns is-centered">
+	  <div class="column is-full-width">
+		<h2 class="title is-3">Experiment Result</h2>
+          <div class="content has-text-justified">		
+            <p><span style="font-weight: bold">Main experiment:</span> 6 different embodiments, with 20 tasks per embodiment, comparing results against RDT, π0, GR00T-N1.5, and UniVLA baselines.
+			</p>
+          </div>
+		  
+		  <div class="columns" id="4pic">
+			<!-- Dual-Arm UR-5e_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Dual-Arm UR-5e_results</b></p>
+			  <img src="./static/images/Dual-Arm UR-5e_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+			<!-- Tien Kung 2.0_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Tien Kung 2.0_results</b></p>
+			  <img src="./static/images/Tien Kung 2.0_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+		  </div>
+		  
+		  
+		  <div class="columns" id="4pic">
+			<!-- tienkung1_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Tienkung1_results</b></p>
+			  <img src="./static/images/tienkung1_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+			<!-- Dual-Arm Franka_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Dual-Arm Franka_results</b></p>
+			  <img src="./static/images/Dual-Arm Franka_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+		  </div>
+		  
+		  <div class="columns" id="4pic">
+			<!-- AgileX Cobot Magic V2.0_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>AgileX Cobot Magic V2.0_results</b></p>
+			  <img src="./static/images/AgileX Cobot Magic V2.0_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+			<!-- Single-Arm UR-5e_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Single-Arm UR-5e_results</b></p>
+			  <img src="./static/images/Single-Arm UR-5e_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+		  </div>
+		  
+		</div>
+	  </div>
+	</div>
+	<br>
+	<br>
+	<!-- Experiment Result -->
+
+
+   
+
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              The website template was borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a>
+              and <a href="https://eureka-research.github.io/">Eureka</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
