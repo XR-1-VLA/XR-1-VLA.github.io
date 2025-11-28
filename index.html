@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="description"
+    content="XR-1: Towards Versatile Vision-Language-Action Models via Learning Unified Vision-Motion Representations">
+  <meta name="keywords" content="Vision-Language-Action Model, Robot Learning, Imitation Learning, Latent Representation, Large-Scale Pretraining">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XR-1: Towards Versatile Vision-Language-Action Models via Learning Unified Vision-Motion Representations</title>
+
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+  <!-- <link href="./static/css/googlecss.css"
+        rel="stylesheet"> -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="./static/js/jquerymin351.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  
+  <!-- React and ReactDOM for Stage-1 animation -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    .author-block {
+        display: none;
+    }
+
+    .publication-authors:hover .author-block {
+        display: block;
+    }
+    
+    /* Stage-1 animation styles */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    #stage1-animation-container {
+        font-family: 'Inter', sans-serif;
+    }
+</style>
+
+</head>
+
+<body>
+
+<!--  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://x-humanoid.com">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+      </div>
+
+    </div>
+  </nav> -->
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">XR-1: Towards Versatile Vision-Language-Action Models via Learning Unified Vision-Motion Representations </h1>
+             
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <!-- <video id="teaser" autoplay muted loop playsinline height="100%">
+          <source src="./static/videos/teaser.mp4" type="video/mp4">
+        </video> -->
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <div class="yush-div-center">
+              <img src="./static/images/xr1_teaser.png" class="img-responsive">
+            </div>
+
+            <h2 class="subtitle has-text-centered">
+              We introduce <span style="font-weight: bold"> XR-1</span>, a versatile and scalable vision-language-action framework. XR-1 supports robust multi-task learning across diverse robot embodiments and environments
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="single-task-1">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Recent progress in large-scale robotic datasets and vision-language models (VLMs) has advanced research on vision-language-action (VLA) models. 
+              However, existing VLA models still face two fundamental challenges: 
+              (i) producing precise low-level actions from high-dimensional observations, 
+              (ii) bridging domain gaps across heterogeneous data sources, including diverse robot embodiments and human demonstrations.
+             
+              Existing methods often encode latent variables from either visual dynamics or robotic actions to guide policy learning, but they fail to fully exploit the complementary multi-modal knowledge present in large-scale, heterogeneous datasets.
+              In this work, we present <span style="font-weight: bold">X Robotic Model 1 (XR-1)</span>, a novel framework for versatile and scalable VLA learning across diverse robots, tasks, and environments.
+
+              At its core, XR-1 introduces the <span style="font-weight: bold">Unified Vision-Motion Codes (UVMC)</span>, a discrete latent representation learned via a dual-branch VQ-VAE that jointly encodes visual dynamics and robotic motion. 
+              UVMC addresses these challenges by 
+              (i) serving as an intermediate representation between the observations and actions, 
+              and (ii) aligning multimodal dynamic information from heterogeneous data sources to capture complementary knowledge.
+              To effectively exploit UVMC, we propose a <span style="font-weight: bold">three-stage training paradigm</span>: 
+              (i) self-supervised UVMC learning, 
+              (ii) UVMC-guided pretraining on large-scale cross-embodiment robotic datasets, 
+              and (iii) task-specific post-training. 
+              We validate XR-1 through extensive real-world experiments with more than 14,000 rollouts on six different robot embodiments, spanning over 120 diverse manipulation tasks.
+              XR-1 consistently outperforms state-of-the-art baselines such as $\pi_{0.5}$, $\pi_0$, RDT, UniVLA, and GR00T-N1.5 while demonstrating strong generalization to novel objects, background variations, distractors, and illumination changes.
+            </p>
+
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <!--/ Abstract. -->
+
+     <!-- <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <video id="teaser" autoplay muted loop playsinline height="100%" controls>
+            <source src="./static/videos/teaser.mp4" type="video/mp4">
+          </video>
+          <br>
+          <br>
+        </div>
+      </div> -->
+
+      <!-- Overview. -->
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Overview</h2>
+          <div class="content has-text-justified">
+            <div class="columns" id="4pic">
+              <div class="column has-text-centered">
+                  <img src="./static/images/xr1_overview.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+              </div>
+          </div>
+
+            <p> Overview of <span style="font-weight: bold"> XR-1</span>. In XR-1, we introduce the <em>Unified Vision-Motion Codes (UVMC)</em>, a discrete latent representation that jointly encodes visual dynamics and robotic motion. XR-1 adopts a three-stage training paradigm to enable precise low-level control across diverse robots and tasks. 
+			</p>
+
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <!-- Overview. -->
+
+	  
+	  <!-- Stage-1: UVMC Learning -->
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Stage-1: Learning Unified Vision-Motion Codes </h2>
+          <div class="content has-text-justified">
+            <div id="stage1-animation-root" style="width: 100%; min-height: 400px; margin: 20px 0; background: transparent; overflow: hidden;"></div>
+            <p>
+              In Stage-1, we learn the Unified Vision-Motion Codes (UVMC) through a dual-branch VQ-VAE architecture. 
+              The visual encoder and motion encoder jointly encode visual observations and action sequences into a shared discrete codebook. 
+              This unified representation bridges the semantic gap between human demonstrations and robot actions, enabling effective knowledge transfer across diverse robot embodiments and environments.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- / Stage-1: UVMC Learning -->
+	  
+	  <!-- Stage-2: UVMC-Guided Pretraining -->
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Stage-2: UVMC-Guided Pretraining for Generalist Policy</h2>
+          <div class="content has-text-justified">
+            <div id="stage2-animation-root" style="width: 100%; min-height: 400px; margin: 20px 0; background: transparent; overflow: hidden;"></div>
+            <p>
+              In Stage 2, after extracting the Unified Vision-Motion Code (UVMC) from the dual-branch VQ-VAE as the supervision signals, we integrate this representation into the policy learning process to enhance low-level action prediction. We pretrain the policy using large-scale cross-embodiment robotic datasets XR-D (158k trajectories and 69.1M frames).
+            </p>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <!-- / Stage-2: UVMC-Guided Pretraining -->
+	  
+	  <!-- Stage-3: Post-Training for Deployment -->
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Stage-3: Post-Training for Deployment</h2>
+          <div class="content has-text-justified">
+            <div id="stage3-animation-root" style="width: 100%; min-height: 400px; margin: 20px 0; background: transparent; overflow: hidden;"></div>
+            <p>
+              In Stage 3, after large-scale UVMC-guided pretraining, the model develops strong capabilities in extracting unified vision-motion knowledge and generating precise low-level actions.
+            </p>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <!-- / Stage-3: Post-Training for Deployment -->
+	  
+	  <!-- Hardware Setup. -->
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Experiment Setup</h2>
+          <div class="content has-text-justified">
+            <div class="columns" id="4pic">
+              <div class="column has-text-centered">
+                  <img src="./static/images/xr1_exp_setup.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+              </div>
+          </div>
+
+            <p>Experimental Setup. We evaluate XR-1 across six robot embodiments(Tien Kung 1.0/2.0, Single-/Dual-Arm UR-5e, Dual-Arm Franka, and AgileX Cobot Magic 2.0), covering more than 120 manipulation tasks with over 14,000 rollouts. 
+			</p>
+
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <!-- / Hardware Setup. -->
+
+		<div class="columns is-centered">
+		  <div class="column is-four-fifths">
+			<h2 class="title is-3">XR1 Inference Video Samples</h2>
+			  <!-- Dual-Arm UR-5e -->
+			  <h3 class="subtitle is-4 has-text-centered">Dual-Arm UR-5e</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DUR-StackBowls</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DUR-StackBowls.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DUR-SweepTrash</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DUR-SweepTrash.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DUR-FindTapeBasket</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DUR-FindTapeBasket.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>	
+			  <!-- Tien Kung 2.0 -->
+			  <h3 class="subtitle is-4 has-text-centered">Tien Kung 2.0</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK2-CloseDoorKnob</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK2-CloseDoorKnob.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK2-CollectScrews</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK2-CollectScrews.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK2-TakeBasketTea</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK2-TakeBasketTea.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+			  <!-- Tien Kung 1.0 -->
+			  <h3 class="subtitle is-4 has-text-centered">Tien Kung 1.0</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK1-PlaceFlipButton</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK1-PlaceFlipButton.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK1-PickWipeTowel</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK1-PickWipeTowel.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>TK1-MoveChopstickCup</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/TK1-MoveChopstickCup.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+			<!-- Dual-Arm Franka -->
+			<h3 class="subtitle is-4 has-text-centered">Dual-Arm Franka</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DFR-StackBowls</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DFR-StackBowls.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DFR-SweepRubbish</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DFR-SweepRubbish.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>DFR-TransferCup</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/DFR-TransferCup.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+			<!-- AgileX Cobot Magic V2.0 -->
+			<h3 class="subtitle is-4 has-text-centered">AgileX Cobot Magic V2.0</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>AGX-MeshStackCup</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/AGX-MeshStackCup.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>AGX-HangScissors</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/AGX-HangScissors.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>AGX-PlaceScrewdriver</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/AGX-PlaceScrewdriver.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+			<!-- Single-Arm UR-5e -->
+			<h3 class="subtitle is-4 has-text-centered">Single-Arm UR-5e</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>SUR-PackEggBox</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/SUR-PackEggBox.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>SUR-PourTubeBeaker</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/SUR-PourTubeBeaker.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%"><b>SUR-StackCubes</b></p>
+				  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+					<source src="./static/videos/SUR-StackCubes.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>
+
+		  </div>
+		</div>
+		<br>
+		<br>
+		
+	  <!-- Generalization Setup -->
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Generalization Setup</h2>
+		<h3 class="subtitle is-5 has-text-centered">DFR-SweepTrash</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Base</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-SweepTrash_Base.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Dustpan</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-SweepTrash_Unseen_Dustpan.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Rub</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-SweepTrash_Unseen_Rubbish.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Rub&Dynamic Interference</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-SweepTrash_Unseen_Rubbish+Dynamic_Object _Interference.mp4" type="video/mp4">
+			  </video>
+			</div>
+		  </div> 
+
+		  
+		<h3 class="subtitle is-5 has-text-centered">DFR-TransferCup</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Base</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-TransferCup_Base.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Background</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-TransferCup_Unseen_Background.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Cup&Static Interference</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-TransferCup_Unseen_Cup+Static_Object_Interference.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 80%">
+			  <b>Unseen Cup&Background&Light</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop height="100%" playbackrate="2.0" style="border-radius: 5px;">
+				<source src="./static/videos/DFR-TransferCup_Unseen Cup+Unseen_Background+Unseen_Light.mp4" type="video/mp4">
+			  </video>
+			</div>
+		  </div> 		  
+		  
+		</div>
+	  </div>
+      <br>
+      <br>	
+		
+		
+		
+		
+		
+		
+	  <!-- Comparison with Baselines -->
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Comparison with Baselines</h2>
+		  <h3 class="subtitle is-4"><span style="font-weight: bold">Representative Tasks Comparison</span></h3>
+          <div class="content has-text-justified">		
+            <p>We conducted evaluations on bimanual collaboration, dexterous manipulation, fluid/deformable object handling, contact-rich interactions, and dynamic environments. Our XR1 model was compared against baseline methods including RDT, π0.5, π0, GR00T-N1.5, and UniVLA. We selected <span style="font-weight: bold">the best baseline (π0.5)</span> for comparative demonstration videos. Demonstration videos are shown below:
+			</p>
+          </div>
+		  
+		  
+		<!-- Bimanual Collaboration -->
+		<h3 class="subtitle is-5 has-text-centered">Bimanual Collaboration: DUR-TransCupHolder</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/pi0_fail_Bimanual_Collaboration.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/xr1_suc_Bimanual_Collaboration.mp4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+
+		<!-- Dexterous Manipulation -->
+		<h3 class="subtitle is-5 has-text-centered">Dexterous Manipulation: DUR-CloseDoorKnob</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/pi0_fail_Dexterous_Manipulation.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/xr1_suc_Dexterous_Manipulation.mp4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>   
+		<!-- Fluid Object Handling -->
+		<h3 class="subtitle is-5 has-text-centered">Fluid Object Handling: SUR-PourTubeBeaker</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/pi0_fail_Fluid_Object_Handling.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/xr1_suc_Fluid_Object_Handling.mp4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+		<!-- Deformable Object Handling -->
+		<h3 class="subtitle is-5 has-text-centered">Deformable Object Handling: DFR-HangTowelRack</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/pi0_fail_Deformable_Object_Handling.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/xr1_suc_Deformable_Object_Handling.mp4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+		<!-- Contact-Rich Interactions -->
+		<h3 class="subtitle is-5 has-text-centered">Contact-Rich Interactions: DFR-SweepRubbish</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/pi0_fail_Contact-Rich_Interactions.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/xr1_suc_Contact-Rich_Interactions.mp4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  
+		<!-- Dynamic Environments -->
+		<h3 class="subtitle is-5 has-text-centered">Dynamic Environments: DUR-TransButtons</h3>
+		  <div class="columns">
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Baseline</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/pi0_fail_Dynamic_Environments.mp4" type="video/mp4">
+			  </video>
+			</div>
+			<div class="column has-text-centered">
+			  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+			  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+			  <b>Ours</b>
+			  </p>
+			  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+				<source src="./static/videos/comparsion/xr1_suc_Dynamic_Environments.mp4" type="video/mp4">
+			  </video>
+			</div>
+		  </div>  		  
+		  
+        </div>
+      </div>
+	  <!-- Few-shot Comparison -->
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+		  <h3 class="subtitle is-4"><span style="font-weight: bold">Few-shot Comparison</span></h3>
+		  <div class="content has-text-justified">		
+			<p>We conducted few-shot learning experiments on the Dual-ArmUR-5e and Tien Kung 2.0 robotic systems, performing comparative analysis against single-task baseline methods including ACT and DP. The experimental results and comparative evaluation are presented as follows:
+			</p>
+			<h3 class="subtitle is-5 has-text-centered">TK2-PlaceCircuit</h3>
+			  <div class="columns">
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+				  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+				  <b>ACT</b>
+				  </p>
+				  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+					<source src="./static/videos/comparsion/ACT_fail_few_shot_TK2-PlaceCircuit.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+				  <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+				  <b>DP</b>
+				  </p>
+				  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+					<source src="./static/videos/comparsion/DP_fail_few_shot_TK2-PlaceCircuit.mp4" type="video/mp4">
+				  </video>
+				</div>
+				<div class="column has-text-centered">
+				  <p style="font-size: 125%; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+				  <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+				  <b>Ours</b>
+				  </p>
+				  <video poster="" id="" autoplay controls muted loop playbackrate="2.0" style="border-radius: 5px; width: 100%; max-width: 100%; display: block; margin: 0 auto;">
+					<source src="./static/videos/comparsion/xr1_suc_few_shot_TK2-PlaceCircuit.mp4" type="video/mp4">
+				  </video>
+				</div>
+			  </div>  
+		  </div>
+        </div>
+      </div>
+      <br>
+      <br>
+
+
+
+
+
+
+
+
+	  
+	<!-- Experiment Result -->
+	<div class="columns is-centered">
+	  <div class="column is-four-fifths">
+		<h2 class="title is-3">Experiment Result</h2>
+          <div class="content has-text-justified">		
+            <p><span style="font-weight: bold">Main experiment:</span> 6 different embodiments, with 20 tasks per embodiment, comparing results against RDT, π0.5, π0, GR00T-N1.5, and UniVLA baselines.
+			</p>
+          </div>
+		  
+		  <div class="columns" id="4pic">
+			<!-- Dual-Arm UR-5e_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Dual-Arm UR-5e_results</b></p>
+			  <img src="./static/images/Dual-Arm UR-5e_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+			<!-- Tien Kung 2.0_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Tien Kung 2.0_results</b></p>
+			  <img src="./static/images/Tien Kung 2.0_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+		  </div>
+		  
+		  
+		  <div class="columns" id="4pic">
+			<!-- tienkung1_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Tienkung1_results</b></p>
+			  <img src="./static/images/tienkung1_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+			<!-- Dual-Arm Franka_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Dual-Arm Franka_results</b></p>
+			  <img src="./static/images/Dual-Arm Franka_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+		  </div>
+		  
+		  <div class="columns" id="4pic">
+			<!-- AgileX Cobot Magic V2.0_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>AgileX Cobot Magic V2.0_results</b></p>
+			  <img src="./static/images/AgileX Cobot Magic V2.0_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+			<!-- Single-Arm UR-5e_results -->
+			<div class="column is-half has-text-centered">
+			  <p style="font-size: 125%"><b>Single-Arm UR-5e_results</b></p>
+			  <img src="./static/images/Single-Arm UR-5e_results.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+			</div>
+		  </div>
+		  
+		</div>
+	  </div>
+	</div>
+	<br>
+	<br>
+	<!-- Experiment Result -->
+
+
+   
+
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              The website template was borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a>
+              and <a href="https://eureka-research.github.io/">Eureka</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Stage-1 Animation Script -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // SVG Icon Components
+    const Image = ({ size = 24, className = "" }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+    );
+
+    const FileText = ({ size = 24, className = "" }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+    );
+    
+    const Robot = ({ size = 24, className = "" }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+            <rect x="3" y="8" width="18" height="12" rx="2" ry="2"></rect>
+            <circle cx="9" cy="14" r="1"></circle>
+            <circle cx="15" cy="14" r="1"></circle>
+            <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="12" y1="8" x2="12" y2="6"></line>
+        </svg>
+    );
+
+    const Video = ({ size = 24, className = "" }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+    );
+
+    const Activity = ({ size = 24, className = "" }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+    );
+
+    const Brain = ({ size = 24, className = "" }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+        </svg>
+    );
+
+    // Motion component using Web Animations API
+    const MotionDiv = ({ children, animate, initial, transition, className, style, ...props }) => {
+        const ref = useRef(null);
+        const [animationStyle, setAnimationStyle] = useState(initial || {});
+        
+        useEffect(() => {
+            if (!ref.current || !animate || typeof animate !== 'object') return;
+            
+            const cleanupFunctions = [];
+            
+            if (animate.left) {
+                const leftValues = Array.isArray(animate.left) ? animate.left : [animate.left];
+                const duration = transition?.duration || 1.5;
+                const delay = transition?.delay || 0;
+                
+                const keyframes = leftValues.map((val, idx) => ({
+                    left: val,
+                    offset: idx / (leftValues.length - 1)
+                }));
+                
+                try {
+                    const animation = ref.current.animate(keyframes, {
+                        duration: duration * 1000,
+                        iterations: transition?.repeat === Infinity ? Infinity : 1,
+                        easing: transition?.ease || 'linear',
+                        delay: delay * 1000
+                    });
+                    
+                    cleanupFunctions.push(() => {
+                        if (animation) animation.cancel();
+                    });
+                } catch (error) {
+                    console.error('Left animation error:', error);
+                }
+            }
+            
+            if (animate.top) {
+                const topValues = Array.isArray(animate.top) ? animate.top : [animate.top];
+                const duration = transition?.duration || 1.5;
+                const delay = transition?.delay || 0;
+                
+                const keyframes = topValues.map((val, idx) => ({
+                    top: val,
+                    offset: idx / (topValues.length - 1)
+                }));
+                
+                try {
+                    const animation = ref.current.animate(keyframes, {
+                        duration: duration * 1000,
+                        iterations: transition?.repeat === Infinity ? Infinity : 1,
+                        easing: transition?.ease || 'linear',
+                        delay: delay * 1000
+                    });
+                    
+                    cleanupFunctions.push(() => {
+                        if (animation) animation.cancel();
+                    });
+                } catch (error) {
+                    console.error('Top animation error:', error);
+                }
+            }
+            
+            if (animate.opacity) {
+                const opacityValues = Array.isArray(animate.opacity) ? animate.opacity : [animate.opacity];
+                const duration = transition?.duration || 1.5;
+                const keyframes = opacityValues.map((val, idx) => ({
+                    opacity: val,
+                    offset: idx / (opacityValues.length - 1)
+                }));
+                
+                try {
+                    const animation = ref.current.animate(keyframes, {
+                        duration: duration * 1000,
+                        iterations: transition?.repeat === Infinity ? Infinity : 1,
+                        easing: 'ease-in-out'
+                    });
+                    
+                    cleanupFunctions.push(() => {
+                        if (animation) animation.cancel();
+                    });
+                } catch (error) {
+                    console.error('Opacity animation error:', error);
+                }
+            }
+            
+            if (animate.backgroundColor) {
+                const bgValues = Array.isArray(animate.backgroundColor) ? animate.backgroundColor : [animate.backgroundColor];
+                const duration = transition?.duration || 2;
+                const delay = transition?.delay || 0;
+                const keyframes = bgValues.map((val, idx) => ({
+                    backgroundColor: val,
+                    offset: idx / (bgValues.length - 1)
+                }));
+                
+                try {
+                    const animation = ref.current.animate(keyframes, {
+                        duration: duration * 1000,
+                        iterations: transition?.repeat === Infinity ? Infinity : 1,
+                        delay: delay * 1000,
+                        easing: 'ease-in-out'
+                    });
+                    
+                    cleanupFunctions.push(() => {
+                        if (animation) animation.cancel();
+                    });
+                } catch (error) {
+                    console.error('BackgroundColor animation error:', error);
+                }
+            }
+            
+            if (animate.scale) {
+                const scale = animate.scale;
+                const duration = transition?.duration || 0.5;
+                setAnimationStyle({
+                    transform: `scale(${scale})`,
+                    transition: `transform ${duration}s ease-out`
+                });
+            }
+            
+            return () => {
+                cleanupFunctions.forEach(cleanup => cleanup());
+            };
+        }, [animate, transition]);
+        
+        useEffect(() => {
+            if (initial && ref.current) {
+                Object.keys(initial).forEach(key => {
+                    ref.current.style[key] = initial[key];
+                });
+            }
+        }, []);
+        
+        const combinedStyle = { ...style, ...animationStyle };
+        
+        return (
+            <div 
+                ref={ref}
+                className={className} 
+                style={combinedStyle}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    };
+
+    const Motion = {
+        motion: {
+            div: MotionDiv
+        }
+    };
+
+    // SceneUVMC Component
+    const SceneUVMC = () => {
+        return (
+            <div className="w-full h-full flex flex-col items-center justify-center relative p-4 md:p-8" style={{ minHeight: '400px', backgroundColor: 'transparent' }}>
+                <div className="relative w-full max-w-6xl h-full flex items-center justify-center">
+                    
+                    {/* Visual Observations Input */}
+                    <div className="absolute left-[calc(50%-488px)] top-[calc(50%-80px)] -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-purple-50 via-purple-100/50 to-purple-50 rounded-2xl border-2 border-purple-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                            <div className="p-2 bg-purple-100/50 rounded-lg mb-1">
+                                <Image className="text-purple-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-purple-800 tracking-wide text-center leading-tight px-1">Visual<br/>Observations</span>
+                        </div>
+                    </div>
+
+                    {/* Action Sequence Input */}
+                    <div className="absolute left-[calc(50%-488px)] top-[calc(50%+80px)] -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-orange-50 via-orange-100/50 to-orange-50 rounded-2xl border-2 border-orange-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                            <div className="p-2 bg-orange-100/50 rounded-lg mb-1">
+                                <Robot className="text-orange-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-orange-800 tracking-wide text-center leading-tight px-1">Action<br/>Sequence</span>
+                        </div>
+                    </div>
+
+                    {/* Connection lines from inputs to encoders */}
+                    <div className="absolute left-[calc(50%-440px+48px)] top-[calc(50%-80px)] -translate-y-1/2 w-[72px] h-[2px] z-5">
+                        <div className="w-full h-full bg-gradient-to-r from-purple-400 via-purple-300 to-purple-200 rounded-full"></div>
+                        <Motion.motion.div 
+                            className="absolute w-2 h-2 bg-purple-500 rounded-full top-[-3px] shadow-md shadow-purple-500/50" 
+                            animate={{ left: ["0%", "100%"] }}
+                            transition={{ 
+                                duration: 1.2,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }} 
+                        />
+                    </div>
+                    
+                    <div className="absolute left-[calc(50%-440px+48px)] top-[calc(50%+80px)] -translate-y-1/2 w-[72px] h-[2px] z-5">
+                        <div className="w-full h-full bg-gradient-to-r from-orange-400 via-orange-300 to-orange-200 rounded-full"></div>
+                        <Motion.motion.div 
+                            className="absolute w-2 h-2 bg-orange-500 rounded-full top-[-3px] shadow-md shadow-orange-500/50" 
+                            animate={{ left: ["0%", "100%"] }}
+                            transition={{ 
+                                duration: 1.2,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }} 
+                        />
+                    </div>
+
+                    {/* Encoders */}
+                    <div className="absolute left-[calc(50%-320px)] top-[calc(50%-80px)] -translate-y-1/2">
+                        <div className="w-32 h-24 bg-gradient-to-br from-white to-purple-50/30 rounded-2xl border-2 border-purple-500/80 flex items-center justify-center shadow-xl relative overflow-hidden backdrop-blur-sm">
+                            <div className="absolute inset-0 bg-gradient-to-r from-purple-100/40 via-transparent to-transparent"></div>
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-purple-600"></div>
+                            <span className="text-xs font-bold text-purple-700 relative z-10 tracking-wide">Vision Encoder</span>
+                        </div>
+                    </div>
+
+                    <div className="absolute left-[calc(50%-320px)] top-[calc(50%+80px)] -translate-y-1/2">
+                        <div className="w-32 h-24 bg-gradient-to-br from-white to-orange-50/30 rounded-2xl border-2 border-orange-500/80 flex items-center justify-center shadow-xl relative overflow-hidden backdrop-blur-sm">
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-100/40 via-transparent to-transparent"></div>
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-orange-600"></div>
+                            <span className="text-xs font-bold text-orange-700 relative z-10 tracking-wide">Motion Encoder</span>
+                        </div>
+                    </div>
+
+                    {/* Curved paths from encoders to codebook */}
+                    <div className="absolute left-[calc(50%-192px)] top-[calc(50%-80px)] -translate-y-1/2 w-[80px] h-[80px] z-10">
+                        <svg className="w-full h-full overflow-visible pointer-events-none absolute" viewBox="0 0 80 80" preserveAspectRatio="none">
+                            <defs>
+                                <filter id="glow-purple">
+                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <path 
+                                id="path-visual-encoder-to-codebook"
+                                d="M 0 40 Q 40 0, 80 40" 
+                                fill="none" 
+                                stroke="#a855f7" 
+                                strokeWidth="2" 
+                                strokeDasharray="4 4"
+                            />
+                            <circle r="4" fill="#a855f7" filter="url(#glow-purple)">
+                                <animateMotion dur="1.5s" repeatCount="indefinite">
+                                    <mpath href="#path-visual-encoder-to-codebook" />
+                                </animateMotion>
+                            </circle>
+                        </svg>
+                    </div>
+                    
+                    <div className="absolute left-[calc(50%-192px)] top-[calc(50%+80px)] -translate-y-1/2 w-[80px] h-[80px] z-10">
+                        <svg className="w-full h-full overflow-visible pointer-events-none absolute" viewBox="0 0 80 80" preserveAspectRatio="none">
+                            <defs>
+                                <filter id="glow-orange">
+                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <path 
+                                id="path-motion-encoder-to-codebook"
+                                d="M 0 40 Q 40 80, 80 40" 
+                                fill="none" 
+                                stroke="#f97316" 
+                                strokeWidth="2" 
+                                strokeDasharray="4 4"
+                            />
+                            <circle r="4" fill="#f97316" filter="url(#glow-orange)">
+                                <animateMotion dur="1.5s" repeatCount="indefinite">
+                                    <mpath href="#path-motion-encoder-to-codebook" />
+                                </animateMotion>
+                            </circle>
+                        </svg>
+                    </div>
+
+                    {/* Unified Codebook */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+                        <Motion.motion.div 
+                            className="w-56 h-56 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl shadow-2xl border-2 border-slate-600/50 p-4 grid grid-cols-4 gap-2 relative"
+                            initial={{ scale: 0.95, opacity: 0.8 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            {[...Array(16)].map((_, i) => (
+                                <Motion.motion.div 
+                                    key={i} 
+                                    className="rounded-lg bg-slate-700/90 backdrop-blur-sm border border-slate-600/30"
+                                    animate={{ 
+                                        backgroundColor: [
+                                            "rgba(51, 65, 85, 0.9)",
+                                            i % 3 === 0 ? "rgba(96, 165, 250, 0.7)" : 
+                                            i % 5 === 0 ? "rgba(192, 132, 252, 0.7)" : 
+                                            "rgba(51, 65, 85, 0.9)",
+                                            "rgba(51, 65, 85, 0.9)"
+                                        ] 
+                                    }}
+                                    transition={{ 
+                                        duration: 2.5,
+                                        repeat: Infinity,
+                                        delay: i * 0.08
+                                    }}
+                                />
+                            ))}
+                            
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-56 text-center">
+                                <span className="bg-gradient-to-r from-slate-800 to-slate-700 text-white text-sm font-bold px-4 py-2 rounded-full shadow-xl border border-slate-500/50 tracking-wide whitespace-nowrap block">
+                                    Unified Vision-Motion Code
+                                </span>
+                            </div>
+                        </Motion.motion.div>
+                    </div>
+
+                    {/* Curved paths from codebook to decoders */}
+                    <div className="absolute left-[calc(50%+112px)] top-[calc(50%-80px)] -translate-y-1/2 w-[80px] h-[80px] z-10">
+                        <svg className="w-full h-full overflow-visible pointer-events-none absolute" viewBox="0 0 80 80" preserveAspectRatio="none">
+                            <defs>
+                                <filter id="glow-purple-right">
+                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <path 
+                                id="path-codebook-to-visual-decoder"
+                                d="M 0 40 Q 40 0, 80 40" 
+                                fill="none" 
+                                stroke="#a855f7" 
+                                strokeWidth="2" 
+                                strokeDasharray="4 4"
+                            />
+                            <circle r="4" fill="#a855f7" filter="url(#glow-purple-right)">
+                                <animateMotion dur="1.5s" repeatCount="indefinite">
+                                    <mpath href="#path-codebook-to-visual-decoder" />
+                                </animateMotion>
+                            </circle>
+                        </svg>
+                    </div>
+                    
+                    <div className="absolute left-[calc(50%+112px)] top-[calc(50%+80px)] -translate-y-1/2 w-[80px] h-[80px] z-10">
+                        <svg className="w-full h-full overflow-visible pointer-events-none absolute" viewBox="0 0 80 80" preserveAspectRatio="none">
+                            <defs>
+                                <filter id="glow-orange-right">
+                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <path 
+                                id="path-codebook-to-motion-decoder"
+                                d="M 0 40 Q 40 80, 80 40" 
+                                fill="none" 
+                                stroke="#f97316" 
+                                strokeWidth="2" 
+                                strokeDasharray="4 4"
+                            />
+                            <circle r="4" fill="#f97316" filter="url(#glow-orange-right)">
+                                <animateMotion dur="1.5s" repeatCount="indefinite">
+                                    <mpath href="#path-codebook-to-motion-decoder" />
+                                </animateMotion>
+                            </circle>
+                        </svg>
+                    </div>
+
+                    {/* Decoders */}
+                    <div className="absolute left-[calc(50%+192px)] top-[calc(50%-80px)] -translate-y-1/2">
+                        <div className="w-32 h-24 bg-gradient-to-br from-white to-purple-50/30 rounded-2xl border-2 border-purple-500/80 flex items-center justify-center shadow-xl relative overflow-hidden backdrop-blur-sm">
+                            <div className="absolute inset-0 bg-gradient-to-l from-purple-100/40 via-transparent to-transparent"></div>
+                            <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-purple-400 to-purple-600"></div>
+                            <span className="text-xs font-bold text-purple-700 relative z-10 tracking-wide">Vision Decoder</span>
+                        </div>
+                    </div>
+
+                    <div className="absolute left-[calc(50%+192px)] top-[calc(50%+80px)] -translate-y-1/2">
+                        <div className="w-32 h-24 bg-gradient-to-br from-white to-orange-50/30 rounded-2xl border-2 border-orange-500/80 flex items-center justify-center shadow-xl relative overflow-hidden backdrop-blur-sm">
+                            <div className="absolute inset-0 bg-gradient-to-l from-orange-100/40 via-transparent to-transparent"></div>
+                            <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-orange-400 to-orange-600"></div>
+                            <span className="text-xs font-bold text-orange-700 relative z-10 tracking-wide">Motion Decoder</span>
+                        </div>
+                    </div>
+
+                    {/* Connection lines from decoders to outputs */}
+                    <div className="absolute left-[calc(50%+320px)] top-[calc(50%-80px)] -translate-y-1/2 w-[72px] h-[2px] z-5">
+                        <div className="w-full h-full bg-gradient-to-r from-purple-200 via-purple-300 to-purple-400 rounded-full"></div>
+                        <Motion.motion.div 
+                            className="absolute w-2 h-2 bg-purple-500 rounded-full top-[-3px] shadow-md shadow-purple-500/50" 
+                            animate={{ left: ["0%", "100%"] }}
+                            transition={{ 
+                                duration: 1.2,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }} 
+                        />
+                    </div>
+                    
+                    <div className="absolute left-[calc(50%+320px)] top-[calc(50%+80px)] -translate-y-1/2 w-[72px] h-[2px] z-5">
+                        <div className="w-full h-full bg-gradient-to-r from-orange-200 via-orange-300 to-orange-400 rounded-full"></div>
+                        <Motion.motion.div 
+                            className="absolute w-2 h-2 bg-orange-500 rounded-full top-[-3px] shadow-md shadow-orange-500/50" 
+                            animate={{ left: ["0%", "100%"] }}
+                            transition={{ 
+                                duration: 1.2,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }} 
+                        />
+                    </div>
+
+                    {/* Outputs */}
+                    <div className="absolute left-[calc(50%+392px)] top-[calc(50%-80px)] -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-purple-50 via-purple-100/50 to-purple-50 rounded-2xl border-2 border-purple-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-200/20 to-transparent"></div>
+                            <div className="p-2 bg-purple-100/50 rounded-lg mb-1 relative z-10">
+                                <Video className="text-purple-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-purple-800 tracking-wide text-center leading-tight px-1 relative z-10">Future<br/>Frame</span>
+                            
+                            <Motion.motion.div 
+                                className="absolute inset-0 bg-purple-400/20 rounded-2xl"
+                                animate={{ opacity: [0, 0.4, 0] }}
+                                transition={{ 
+                                    duration: 2.5,
+                                    repeat: Infinity
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="absolute left-[calc(50%+392px)] top-[calc(50%+80px)] -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-orange-50 via-orange-100/50 to-orange-50 rounded-2xl border-2 border-orange-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-orange-200/20 to-transparent"></div>
+                            <div className="p-2 bg-orange-100/50 rounded-lg mb-1 relative z-10">
+                                <Activity className="text-orange-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-orange-800 tracking-wide text-center leading-tight px-1 relative z-10">Action<br/>Reconstruction</span>
+                            
+                            <Motion.motion.div 
+                                className="absolute inset-0 bg-orange-400/20 rounded-2xl"
+                                animate={{ opacity: [0, 0.4, 0] }}
+                                transition={{ 
+                                    duration: 2.5,
+                                    repeat: Infinity
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        );
+    };
+
+    // stage2
+    const Stage2Animation = () => {
+        return (
+            <div className="w-full h-full flex flex-col items-center justify-center relative p-4 md:p-8" style={{ minHeight: '300px', backgroundColor: 'transparent' }}>
+                <div className="relative w-full max-w-md h-full flex items-center justify-center">
+                    {/* Visual Observations Input */}
+                    <div className="absolute left-[calc(50%-488px)] top-[calc(50%-80px)] -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-purple-50 via-purple-100/50 to-purple-50 rounded-2xl border-2 border-purple-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                            <div className="p-2 bg-purple-100/50 rounded-lg mb-1">
+                                <Image className="text-purple-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-purple-800 tracking-wide text-center leading-tight px-1">Visual<br/>Observations</span>
+                        </div>
+                    </div>
+
+                    {/* Language Instruction Input */}
+                    <div className="absolute left-[calc(50%-488px)] top-[calc(50%+80px)] -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-green-50 via-green-100/50 to-green-50 rounded-2xl border-2 border-green-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                            <div className="p-2 bg-green-100/50 rounded-lg mb-1">
+                                <FileText className="text-green-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-green-800 tracking-wide text-center leading-tight px-1">Language<br/>Instruction</span>
+                        </div>
+                    </div>
+
+                    {/* Connection: Language Instruction → VLA Policy (horizontal, green to light green gradient) */}
+                    <div className="absolute left-[calc(50%-392px)] top-[calc(50%+80px)] -translate-y-1/2 w-[280px] h-[2px] z-5">
+                        <div className="w-full h-full bg-gradient-to-r from-green-500 via-green-400 to-green-200 rounded-full"></div>
+                        <Motion.motion.div 
+                            className="absolute w-2 h-2 bg-green-500 rounded-full top-[-3px] shadow-md shadow-green-500/50" 
+                            animate={{ left: ["0%", "100%"] }}
+                            transition={{ 
+                                duration: 1.5,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }} 
+                        />
+                    </div>
+
+                    {/* Connection: Visual Observations → VLA Policy (solid line, purple to light purple gradient) */}
+                    <div className="absolute left-[calc(50%-392px)] top-[calc(50%-16px)] -translate-y-1/2 w-[280px] h-[130px] z-5">
+                        <svg className="w-full h-full overflow-visible pointer-events-none absolute" viewBox="0 0 256 112" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="grad-purple-to-light" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#9333ea" stopOpacity="1" />
+                                    <stop offset="100%" stopColor="#c084fc" stopOpacity="0.6" />
+                                </linearGradient>
+                                <filter id="glow-purple-blue">
+                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <path 
+                                id="path-visual-to-vla"
+                                d="M 0 0 Q 128 56, 256 112" 
+                                fill="none" 
+                                stroke="url(#grad-purple-to-light)" 
+                                strokeWidth="2"
+                            />
+                            <circle r="4" fill="#9333ea" filter="url(#glow-purple-blue)">
+                                <animateMotion dur="1.5s" repeatCount="indefinite">
+                                    <mpath href="#path-visual-to-vla" />
+                                </animateMotion>
+                            </circle>
+                        </svg>
+                    </div>
+
+                    {/* Unified Codebook (Teacher) */}
+                    <div className="absolute left-1/2 top-[calc(50%-80px)] -translate-x-1/2 -translate-y-1/2 z-20">
+                        <Motion.motion.div 
+                            className="w-24 h-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl border-2 border-slate-600/50 p-1.5 grid grid-cols-4 gap-0.5 relative"
+                            initial={{ scale: 0.95, opacity: 0.8 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            {[...Array(16)].map((_, i) => (
+                                <Motion.motion.div 
+                                    key={i} 
+                                    className="rounded bg-slate-700/90 backdrop-blur-sm border border-slate-600/30"
+                                    animate={{ 
+                                        backgroundColor: [
+                                            "rgba(51, 65, 85, 0.9)",
+                                            i % 3 === 0 ? "rgba(96, 165, 250, 0.7)" : 
+                                            i % 5 === 0 ? "rgba(192, 132, 252, 0.7)" : 
+                                            "rgba(51, 65, 85, 0.9)",
+                                            "rgba(51, 65, 85, 0.9)"
+                                        ] 
+                                    }}
+                                    transition={{ 
+                                        duration: 2.5,
+                                        repeat: Infinity,
+                                        delay: i * 0.08
+                                    }}
+                                />
+                            ))}
+                            
+                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-24 text-center">
+                                <span className="bg-gradient-to-r from-slate-800 to-slate-700 text-white text-[9px] font-bold px-2 py-1 rounded-full shadow-xl border border-slate-500/50 tracking-wide whitespace-nowrap block">
+                                    UVMC(Teacher)
+                                </span>
+                            </div>
+                        </Motion.motion.div>
+                    </div>
+
+                    {/* Connection: VLA Policy → UVMC(Teacher) (vertical, blue to gray gradient) */}
+                    <div className="absolute left-1/2 top-[calc(50%-40px)] -translate-x-1/2 w-[2px] h-[72px] z-5">
+                        <div className="w-full h-full bg-gradient-to-t from-blue-400 via-blue-300 to-slate-400 rounded-full"></div>
+                        <Motion.motion.div 
+                            className="absolute w-2 h-2 bg-blue-500 rounded-full left-[-3px] shadow-md shadow-blue-500/50" 
+                            animate={{ top: ["100%", "0%"] }}
+                            transition={{ 
+                                duration: 1.5,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }} 
+                        />
+                    </div>
+
+                    {/* VLA Policy (Student) */}
+                    <div className="absolute left-1/2 top-[calc(50%+80px)] -translate-x-1/2 -translate-y-1/2">
+                        <div className="w-64 bg-gradient-to-br from-blue-50 via-blue-100/50 to-blue-50 rounded-2xl border-2 border-blue-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm p-4">
+                            <div className="p-2 bg-blue-100/50 rounded-lg mb-2">
+                                <Brain className="text-blue-600" size={32} />
+                            </div>
+                            <span className="text-base font-bold text-blue-800 tracking-wide text-center leading-tight mb-1">
+                                VLA Policy
+                            </span>
+                            <span className="text-sm font-bold text-blue-800 tracking-wide text-center leading-tight">
+                                (Student)
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Connection: VLA Policy → Action Prediction (horizontal, light orange to dark orange gradient) */}
+                    <div className="absolute left-[calc(50%+128px)] top-[calc(50%+80px)] -translate-y-1/2 w-[280px] h-[2px] z-5">
+                        <div className="w-full h-full bg-gradient-to-r from-orange-200 via-orange-400 to-orange-600 rounded-full"></div>
+                        <Motion.motion.div 
+                            className="absolute w-2 h-2 bg-orange-500 rounded-full top-[-3px] shadow-md shadow-orange-500/50" 
+                            animate={{ left: ["0%", "100%"] }}
+                            transition={{ 
+                                duration: 1.5,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }} 
+                        />
+                    </div>
+
+                    {/* Activity Output */}
+                    <div className="absolute left-[calc(50%+444px)] top-[calc(50%+80px)] -translate-x-1/2 -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-orange-50 via-orange-100/50 to-orange-50 rounded-2xl border-2 border-orange-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                            <div className="p-2 bg-orange-100/50 rounded-lg mb-1">
+                                <Activity className="text-orange-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-orange-800 tracking-wide text-center leading-tight px-1">Action<br/>Prediction</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        );
+    };
+
+    // stage2
+    const Stage3Animation = () => {
+        return (
+            <div className="w-full h-full flex flex-col items-center justify-center relative p-4 md:p-8" style={{ minHeight: '300px', backgroundColor: 'transparent' }}>
+                <div className="relative w-full max-w-md h-full flex items-center justify-center">
+                    {/* Visual Observations Input */}
+                    <div className="absolute left-[calc(50%-488px)] top-[calc(50%-80px)] -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-purple-50 via-purple-100/50 to-purple-50 rounded-2xl border-2 border-purple-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                            <div className="p-2 bg-purple-100/50 rounded-lg mb-1">
+                                <Image className="text-purple-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-purple-800 tracking-wide text-center leading-tight px-1">Visual<br/>Observations</span>
+                        </div>
+                    </div>
+                    
+                    {/* Connection: Visual Observations → VLA Policy (curved, purple to light purple gradient) */}
+                    <div className="absolute left-[calc(50%-488px+96px)] top-[calc(50%-80px+60px)] -translate-y-1/2 w-[280px] h-[130px] z-5">
+                        <svg className="w-full h-full overflow-visible pointer-events-none absolute" viewBox="0 0 256 112" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="grad-purple-to-light" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#a855f7" stopOpacity="1" />
+                                    <stop offset="100%" stopColor="#e9d5ff" stopOpacity="0.7" />
+                                </linearGradient>
+                            </defs>
+                            {/* 从左上到右下，连到 VLA Policy 左边沿中心附近 */}
+                            <path
+                                id="path-vision-to-vla"
+                                d="M 0 0 L 256 70"
+                                fill="none"
+                                stroke="url(#grad-purple-to-light)"
+                                strokeWidth="2"
+                            />
+                            <circle r="4" fill="#a855f7">
+                                <animateMotion dur="1.5s" repeatCount="indefinite">
+                                    <mpath href="#path-vision-to-vla" />
+                                </animateMotion>
+                            </circle>
+                        </svg>
+                    </div>
+
+                    {/* Language Instruction Input */}
+                    <div className="absolute left-[calc(50%-488px)] top-[calc(50%+80px)] -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-green-50 via-green-100/50 to-green-50 rounded-2xl border-2 border-green-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                            <div className="p-2 bg-green-100/50 rounded-lg mb-1">
+                                <FileText className="text-green-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-green-800 tracking-wide text-center leading-tight px-1">Language<br/>Instruction</span>
+                        </div>
+                    </div>
+                    {/* Connection: Language Instruction → VLA Policy (curved, green to light green gradient) */}
+                    <div className="absolute left-[calc(50%-488px+96px)] top-[calc(50%+80px-60px)] -translate-y-1/2 w-[280px] h-[130px] z-5">
+                        <svg className="w-full h-full overflow-visible pointer-events-none absolute" viewBox="0 0 256 112" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="grad-green-to-light" x1="0%" y1="100%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#22c55e" stopOpacity="1" />
+                                    <stop offset="100%" stopColor="#bbf7d0" stopOpacity="0.7" />
+                                </linearGradient>
+                            </defs>
+                            {/* 从左下到右上，连到 VLA Policy 左边沿中心附近 */}
+                            <path
+                                id="path-lang-to-vla"
+                                d="M 0 112 L 256 30"
+                                fill="none"
+                                stroke="url(#grad-green-to-light)"
+                                strokeWidth="2"
+                            />
+                            <circle r="4" fill="#22c55e">
+                                <animateMotion dur="1.5s" repeatCount="indefinite">
+                                    <mpath href="#path-lang-to-vla" />
+                                </animateMotion>
+                            </circle>
+                        </svg>
+                    </div>
+
+
+
+                    {/* VLA Policy */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div className="w-64 bg-gradient-to-br from-blue-50 via-blue-100/50 to-blue-50 rounded-2xl border-2 border-blue-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm p-4">
+                            <div className="p-2 bg-blue-100/50 rounded-lg mb-2">
+                                <Brain className="text-blue-600" size={32} />
+                            </div>
+                            <span className="text-base font-bold text-blue-800 tracking-wide text-center leading-tight mb-1">
+                                VLA Policy
+                            </span>
+                            <span className="text-sm font-bold text-blue-800 tracking-wide text-center leading-tight">
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Connection: VLA Policy → Action Prediction (horizontal, light orange to dark orange gradient) */}
+                    <div className="absolute left-[calc(50%+128px)] top-1/2 -translate-y-1/2 w-[280px] h-[2px] z-5">
+                        <div className="w-full h-full bg-gradient-to-r from-orange-200 via-orange-400 to-orange-600 rounded-full"></div>
+                        <Motion.motion.div 
+                            className="absolute w-2 h-2 bg-orange-500 rounded-full top-[-3px] shadow-md shadow-orange-500/50" 
+                            animate={{ left: ["0%", "100%"] }}
+                            transition={{ 
+                                duration: 1.5,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }} 
+                        />
+                    </div>
+
+                    {/* Activity Output */}
+                    <div className="absolute left-[calc(50%+444px)] top-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-orange-50 via-orange-100/50 to-orange-50 rounded-2xl border-2 border-orange-400/60 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                            <div className="p-2 bg-orange-100/50 rounded-lg mb-1">
+                                <Activity className="text-orange-600" size={24} />
+                            </div>
+                            <span className="text-[11px] font-bold text-orange-800 tracking-wide text-center leading-tight px-1">Action<br/>Prediction</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        );
+    };
+
+
+	const renderStage1Animation = (rootId) => {
+		const rootElement = document.getElementById(rootId);
+		if (!rootElement) {
+			console.error(`Animation root element "${rootId}" not found`);
+			return;
+		}
+
+		if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+			rootElement.innerHTML = '<div style="padding: 20px; color: red;">React libraries not loaded</div>';
+			return;
+		}
+
+		try {
+			if (ReactDOM.createRoot) {
+				const root = ReactDOM.createRoot(rootElement);
+				root.render(<SceneUVMC />);
+			} else if (ReactDOM.render) {
+				ReactDOM.render(<SceneUVMC />, rootElement);
+			} else {
+				throw new Error('ReactDOM.createRoot and ReactDOM.render are not available');
+			}
+		} catch (error) {
+			console.error('Error rendering animation:', error);
+			rootElement.innerHTML = `
+				<div style="padding: 20px; text-align: center; color: red;">
+					<h3>Animation Loading Error</h3>
+					<p>${error.message}</p>
+				</div>
+			`;
+		}
+	};
+
+
+	const renderStage2Animation = (rootId) => {
+		const rootElement = document.getElementById(rootId);
+		if (!rootElement) {
+			console.error(`Animation root element "${rootId}" not found`);
+			return;
+		}
+
+		if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+			rootElement.innerHTML = '<div style="padding: 20px; color: red;">React libraries not loaded</div>';
+			return;
+		}
+
+		try {
+			if (ReactDOM.createRoot) {
+				const root = ReactDOM.createRoot(rootElement);
+				root.render(<Stage2Animation />);
+			} else if (ReactDOM.render) {
+				ReactDOM.render(<Stage2Animation />, rootElement);
+			} else {
+				throw new Error('ReactDOM.createRoot and ReactDOM.render are not available');
+			}
+		} catch (error) {
+			console.error('Error rendering unified codebook:', error);
+			rootElement.innerHTML = `
+				<div style="padding: 20px; text-align: center; color: red;">
+					<h3>Animation Loading Error</h3>
+					<p>${error.message}</p>
+				</div>
+			`;
+		}
+	};
+
+	const renderStage3Animation = (rootId) => {
+		const rootElement = document.getElementById(rootId);
+		if (!rootElement) {
+			console.error(`Animation root element "${rootId}" not found`);
+			return;
+		}
+
+		if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+			rootElement.innerHTML = '<div style="padding: 20px; color: red;">React libraries not loaded</div>';
+			return;
+		}
+
+		try {
+			if (ReactDOM.createRoot) {
+				const root = ReactDOM.createRoot(rootElement);
+				root.render(<Stage3Animation />);
+			} else if (ReactDOM.render) {
+				ReactDOM.render(<Stage3Animation />, rootElement);
+			} else {
+				throw new Error('ReactDOM.createRoot and ReactDOM.render are not available');
+			}
+		} catch (error) {
+			console.error('Error rendering stage 3 animation:', error);
+			rootElement.innerHTML = `
+				<div style="padding: 20px; text-align: center; color: red;">
+					<h3>Animation Loading Error</h3>
+					<p>${error.message}</p>
+				</div>
+			`;
+		}
+	};
+
+	// Wait for DOM and scripts to load
+	const bootAnimations = () => {
+		// Render Stage-1 animation
+		renderStage1Animation('stage1-animation-root');
+		// Render Stage-2 animation
+		renderStage2Animation('stage2-animation-root');
+		// Render Stage-3 animation
+		renderStage3Animation('stage3-animation-root');
+	};
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', () => {
+			setTimeout(bootAnimations, 500);
+		});
+	} else {
+		setTimeout(bootAnimations, 500);
+	}
+  </script>
+
+
+
+
+</body>
+
+</html>
