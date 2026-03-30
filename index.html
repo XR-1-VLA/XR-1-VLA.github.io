@@ -801,9 +801,12 @@
       <div class="content has-text-justified">
         <p>
           <span style="font-weight: bold">Description:</span>
-          To validate that the joint representation remains effective after fine-tuning, we provide qualitative future-frame reconstructions for tasks such as DUR-FindTapeBasket and DUR-SweepTrash on our project website. Our UVMC decoder is intentionally designed to be 4x  smaller than the encoder (Table 5); this asymmetric constraint ensures that high-quality reconstruction relies on the information density of the vision-motion codes rather than decoder memorization. To rigorously test the codes' necessity, we compared reconstructions using (1) predicted vision codes, (2) zeroed codes, and (3) randomized codes against the ground truth. We observed that omitting or randomizing the codes leads to a total failure in recovering scene dynamics, whereas the predicted UVMC tokens enable the lightweight decoder to reconstruct high-fidelity future states. This confirms that the predicted tokens successfully preserve and communicate the joint visual-dynamic information required for sequential manipulation.
-
-        
+          To validate that the joint representation remains effective after fine-tuning, we provide qualitative future-frame reconstructions for tasks such as <code>DUR-FindTapeBasket</code> and <code>DUR-SweepTrash</code> on our project website.
+          <strong>The key result is that the predicted UVMC tokens are essential for reconstruction quality.</strong>
+          Our UVMC decoder is intentionally <strong>4x smaller than the encoder</strong> (<strong>Table 5</strong>), so successful reconstruction cannot rely on decoder memorization and must instead come from the information carried by the vision-motion codes.
+          We therefore compare reconstruction using <strong>predicted vision codes</strong>, <strong>zeroed codes</strong>, and <strong>randomized codes</strong>.
+          We find that <strong>zeroed or randomized codes completely fail to recover scene dynamics</strong>, while the predicted UVMC tokens enable the lightweight decoder to reconstruct high-fidelity future states.
+          <strong>This directly confirms that the predicted tokens preserve the joint visual-dynamic information required for sequential manipulation.</strong>
         </p>
       </div>
 
