@@ -725,14 +725,170 @@
 		  </div>
 		  
 		</div>
-	  </div>
 	</div>
 	<br>
 	<br>
 	<!-- Experiment Result -->
 
+  <!-- Training Dynamics of UVMC Section -->
+  <div class="columns is-centered">
+    <div class="column is-four-fifths">
+      <h2 class="title is-3">Training Dynamics of UVMC and Limitations</h2>
+      <div class="content has-text-justified">
+        <p>
+          <span style="font-weight: bold">Description:</span>
+          We provide pre-training logs to demonstrate the robustness of our hierarchical representation.
+          <span style="font-weight: bold">Stable convergence:</span>
+          both the vision reconstruction loss and the action reconstruction loss decrease rapidly in the early stage of training and then converge to a stable plateau.
+          Despite the high diversity of the heterogeneous pre-training data (<code>Ego4D</code>, <code>OXE</code>, <code>Robomind</code>, and <code>XR-D</code>), this steady convergence indicates that UVMC can effectively capture high-level dynamics.
+          <span style="font-weight: bold">Codebook vitality:</span>
+          we further monitor the Active Code Number, defined as the number of unique codes activated within each batch on each GPU.
+          The vision codes stabilize at approximately 30, while the motion codes reach a healthy plateau of approximately 50.
+          This trend shows that our pre-training avoids codebook collapse and preserves strong representational capacity.
+          The absence of sudden drops in code usage further confirms that the discrete latent space is consistently utilized to encode complex cross-modal features.
+        </p>
+        <p>
+          <span style="font-weight: bold">Limitations:</span>
+          One limitation of UVMC is that it uses images sampled every <i>k</i> frames, which may miss intermediate process information.
+          Using all consecutive frames could provide richer vision-dynamic features, but would also introduce substantial computational overhead due to the large number of visual tokens.
+          A promising future direction is therefore to learn finer-grained latent features while selectively retaining the most informative tokens and removing redundant ones.
+        </p>
 
-   
+      </div>
+
+      <!-- Add your new content here -->
+
+		  <div class="columns" id="4pic">
+
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%"><b>Vision Reconstruction Loss</b></p>
+          <img src="./static/images/visualization/vision_reconstrution.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%"><b>Action Reconstruction Loss</b></p>
+          <img src="./static/images/visualization/action_reconstrution.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+
+        <!-- <div class="column is-half has-text-centered">
+          <p style="font-size: 125%"><b>Vision-Motion Alignment Loss</b></p>
+          <img src="./static/images/visualization/kl_loss.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div> -->
+        </div>
+
+        <div class="columns" id="4pic">
+          <div class="column is-half has-text-centered">
+            <p style="font-size: 125%"><b>Vision code number (per batch per GPU)</b></p>
+            <img src="./static/images/visualization/vision_code.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+          </div>
+
+          <div class="column is-half has-text-centered">
+            <p style="font-size: 125%"><b>Motion code number (per batch per GPU)</b></p>
+            <img src="./static/images/visualization/motion_code.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+          </div>
+          </div>        
+
+    </div>
+  </div>
+  <br>
+  <br>
+  <!--  Training Dynamics of UVMC Section -->
+	
+  <!-- Visualization of future frame prediction Section -->
+  <div class="columns is-centered">
+    <div class="column is-four-fifths">
+      <h2 class="title is-3">Visualization of future frame prediction</h2>
+      <div class="content has-text-justified">
+        <p>
+          <span style="font-weight: bold">Description:</span>
+          To validate that the joint representation remains effective after fine-tuning, we provide qualitative future-frame reconstructions for tasks such as DUR-FindTapeBasket and DUR-SweepTrash on our project website. Our UVMC decoder is intentionally designed to be 4x  smaller than the encoder (Table 5); this asymmetric constraint ensures that high-quality reconstruction relies on the information density of the vision-motion codes rather than decoder memorization. To rigorously test the codes' necessity, we compared reconstructions using (1) predicted vision codes, (2) zeroed codes, and (3) randomized codes against the ground truth. We observed that omitting or randomizing the codes leads to a total failure in recovering scene dynamics, whereas the predicted UVMC tokens enable the lightweight decoder to reconstruct high-fidelity future states. This confirms that the predicted tokens successfully preserve and communicate the joint visual-dynamic information required for sequential manipulation.
+
+        
+        </p>
+      </div>
+
+      <!-- Add your new content here -->
+      <h3 class="subtitle is-5 has-text-centered"><b>DUR-FindTapeBasket</b></h3>
+      <div class="columns">
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%">source frame</p>
+          <img src="./static/images/visualization/DUR-FindTapeBasket/30_source_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%">future frame</p>
+          <img src="./static/images/visualization/DUR-FindTapeBasket/1_target_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+
+      </div>
+      <div class="columns">
+
+      <div class="column is-one-third has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;"><b>reconstruction frame (vision code)</b></p>
+        </div>
+        <img src="./static/images/visualization/DUR-FindTapeBasket/1_recons_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+      <div class="column is-one-third has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;">reconstruction frame (zero code)</p>
+        </div>
+        <img src="./static/images/visualization/DUR-FindTapeBasket/1_recons_image_0_zero.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+      <div class="column is-one-third has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;">reconstruction frame (random code)</p>
+        </div>
+        <img src="./static/images/visualization/DUR-FindTapeBasket/1_recons_image_0_rand.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+    </div>
+      <!-- Add your new content here -->
+      <h3 class="subtitle is-5 has-text-centered"><b>DUR-SweepTrash</b></h3>
+      <div class="columns">
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%">source frame</p>
+          <img src="./static/images/visualization/DUR-SweepTrash/67_source_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%">future frame</p>
+          <img src="./static/images/visualization/DUR-SweepTrash/33_target_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+
+      </div>
+      <div class="columns">
+
+      <div class="column is-one-third has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;"><b>reconstruction frame (vision code)</b></p>
+        </div>
+        <img src="./static/images/visualization/DUR-SweepTrash/33_recons_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+      <div class="column is-one-third has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;">reconstruction frame (zero code)</p>
+        </div>
+        <img src="./static/images/visualization/DUR-SweepTrash/33_recons_image_0_zero.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+      <div class="column is-one-third has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;">reconstruction frame (random code)</p>
+        </div>
+          <img src="./static/images/visualization/DUR-SweepTrash/33_recons_image_0_rand.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+
+
+      
+    </div>
+  </div>
+  <br>
+  <br>
+  <!-- Visualization of future frame prediction Section -->
+
 
   </section>
 
