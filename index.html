@@ -885,13 +885,118 @@
       </div>
 
 
-      
+    </div>    
     </div>
   </div>
   <br>
   <br>
   <!-- Visualization of future frame prediction Section -->
 
+
+  <!-- 2.VQ-VAE vs VAE Section -->
+  <div class="columns is-centered">
+    <div class="column is-four-fifths">
+      <h2 class="title is-3">VQ-VAE vs VAE</h2>
+
+      <h2 class="title is-4">Stage 1 Training dynamics</h2>
+      <div class="content has-text-justified">
+        <p>
+          <span style="font-weight: bold">Description: </span>
+          We compare both the action reconstruction loss and the vision reconstruction loss. VQ-VAE (pink curve) consistently outperforms VAE (brown curve) on both metrics. Specifically, the final action reconstruction loss is 0.0823 vs. 0.1277, and the vision reconstruction loss is 0.0356 vs. 0.0549. These results show that, under the same training setup, VQ-VAE learns a more effective latent representation and achieves better convergence. This finding further suggests that, compared with a continuous latent space, discrete latent tokens provide a more structured and decoder-friendly representation.
+        </p>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%"><b>Action Reconstruction Loss</b></p>
+          <img src="./static/images/visualization/VQVAEvsVAE_action_recons.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%"><b>Vision Reconstruction Loss</b></p>
+          <img src="./static/images/visualization/VQVAEvsVAE_image_recons.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+      </div>
+
+
+
+      <h2 class="title is-4">Stage 1 visualization of future frame prediction</h2>
+      <div class="content has-text-justified">
+        <p>
+          <span style="font-weight: bold">Description:</span>
+          We further provide qualitative visualizations of future-frame prediction. VQ-VAE produces reconstructions that are consistently sharper and preserve key objects and scene dynamics more faithfully than VAE. For example, in the task `DUR-SweepTrash`, the VAE reconstruction fails to preserve the broom clearly, whereas VQ-VAE still retains its main structural features. This qualitative evidence is consistent with the lower reconstruction losses and further supports the advantage of VQ-VAE in preserving visually and dynamically relevant information.         
+        </p>
+      </div>
+
+      <!-- Add your new content here -->
+      <h3 class="subtitle is-5 has-text-centered"><b>DUR-FindTapeBasket</b></h3>
+      <div class="columns">
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%">source frame</p>
+          <img src="./static/images/visualization/DUR-FindTapeBasket/30_source_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%">future frame</p>
+          <img src="./static/images/visualization/DUR-FindTapeBasket/1_target_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+
+      </div>
+      <div class="columns">
+
+      <div class="column is-one-half has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;"><b>reconstruction frame (VQ-VAE)</b></p>
+        </div>
+        <img src="./static/images/visualization/DUR-FindTapeBasket/1_recons_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+      <div class="column is-one-half has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;">reconstruction frame (VAE)</p>
+        </div>
+        <img src="./static/images/visualization/DUR-FindTapeBasket/1_recons_image_0_vae.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+
+    </div>
+      <!-- Add your new content here -->
+      <h3 class="subtitle is-5 has-text-centered"><b>DUR-SweepTrash</b></h3>
+      <div class="columns">
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%">source frame</p>
+          <img src="./static/images/visualization/DUR-SweepTrash/67_source_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+        <div class="column is-half has-text-centered">
+          <p style="font-size: 125%">future frame</p>
+          <img src="./static/images/visualization/DUR-SweepTrash/33_target_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+        </div>
+
+      </div>
+      <div class="columns">
+
+      <div class="column is-one-half has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_suc.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;"><b>reconstruction frame (VQ-VAE)</b></p>
+        </div>
+        <img src="./static/images/visualization/DUR-SweepTrash/33_recons_image_0.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+      <div class="column is-one-half has-text-centered">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+          <img src="./static/images/icon_fail.png" alt="Icon" style="width: 20px; height: 20px; margin-right: 8px;">
+          <p style="font-size: 125%; margin: 0;">reconstruction frame (VAE)</p>
+        </div>
+        <img src="./static/images/visualization/DUR-SweepTrash/33_recons_image_0_vae.png" class="interpolation-image" alt="" style="display: block; width: 100%; margin-left: auto; margin-right: auto">
+      </div>
+
+    </div>  
+    </div>
+  </div>
+  <br>
+  <br>
+  <!-- 2.VQ-VAE vs VAE Section-->
+
+  
 
   </section>
 
