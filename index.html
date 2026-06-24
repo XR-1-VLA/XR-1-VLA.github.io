@@ -33,11 +33,11 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
   
-  <!-- React and ReactDOM for Stage-1 animation -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React, ReactDOM, Babel and Tailwind for Stage animations (vendored locally to avoid CDN failures) -->
+  <script src="./static/js/react.development.js"></script>
+  <script src="./static/js/react-dom.development.js"></script>
+  <script src="./static/js/babel.min.js"></script>
+  <script src="./static/js/tailwind.min.js"></script>
   
   <style>
     .author-block {
@@ -281,7 +281,9 @@
         <div class="column is-four-fifths">
           <h2 class="title is-3">Stage-1: Learning Unified Vision-Motion Codes </h2>
           <div class="content has-text-justified">
-            <div id="stage1-animation-root" style="width: 100%; min-height: 400px; margin: 20px 0; background: transparent; overflow: hidden;"></div>
+            <div style="width: 100%; overflow-x: auto; margin: 20px 0;">
+				<div id="stage1-animation-root" style="min-width: 1000px; min-height: 400px; background: transparent; position: relative;"></div>
+			</div>
             <p>
               In Stage-1, we learn the Unified Vision-Motion Codes (UVMC) through a dual-branch VQ-VAE architecture. 
               The visual encoder and motion encoder jointly encode visual observations and action sequences into a shared discrete codebook. 
